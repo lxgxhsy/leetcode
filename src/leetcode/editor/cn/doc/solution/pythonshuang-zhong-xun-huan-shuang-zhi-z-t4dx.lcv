@@ -1,0 +1,34 @@
+垃圾脑袋就只能想出这种垃圾算法了...
+
+* []
+
+```python
+class Solution:
+    def fourSum(self, nums, target):
+        # 先对数组nums排序，从小到大
+        # 双重循环 + 双指针
+        nums.sort()
+        n = len(nums)
+        results = list()
+        for i in range(n - 3):
+            if nums[i] == nums[i - 1] and i > 0:
+                continue
+            for j in range(i + 1, n - 2):
+                left, right = j + 1, n - 1
+                if nums[j] == nums[j - 1] and j > i + 1:
+                    continue
+                while left < right:
+                    if nums[left] == nums[left - 1] and left > j + 1:
+                        left += 1
+                        continue
+                    a, b, c, d = nums[i], nums[j], nums[left], nums[right]
+                    if a + b + c + d > target:
+                        right -= 1
+                    elif a + b + c + d < target:
+                        left += 1
+                    elif a + b + c + d == target:
+                        results.append([a, b, c, d])
+                        left += 1
+        return results
+```
+

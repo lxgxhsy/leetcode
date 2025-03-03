@@ -1,0 +1,81 @@
+### 解题思路
+
+快排+双指针
+
+### 代码
+
+* cpp
+
+```cpp
+class Solution {
+
+public:
+    bool less(int a,int b)
+    {
+        return a < b;
+    }
+    void exch(vector<int>& a,int i,int j)
+    {
+        int tmp = a[i]; a[i] = a[j];a[j] = tmp;
+    }
+    int Partition(vector<int>& a,int lo,int hi)
+    {
+        int i = lo;
+        int j = hi+1;
+        int v = a[lo];
+        while(true)
+        {
+            while(less(a[++i],v))if(i == hi) break;
+            while(less(v,a[--j]))if(j == lo) break;
+            if(i >= j) break;
+            exch(a,i,j);
+        }
+        exch(a,lo,j);
+        return j;
+    }
+    void QuickSort(vector<int>& a,int lo,int hi)
+    {
+        if(lo >= hi) return;
+        int j = Partition(a,lo,hi);
+        QuickSort(a,lo,j-1);
+        QuickSort(a,j+1,hi);
+    }
+
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        int N = nums.size();
+        vector<vector<int>> lists = vector<vector<int>>();
+        if(N < 4) return lists;
+        else{
+        QuickSort(nums,0,N-1);
+
+        for(int a = 0;a < N-3;a++)
+        {
+            if(a > 0 && nums[a] == nums[a-1]) continue;
+            for(int b =a+1;b < N-2;b++)
+            {
+                if(b > a+1 && nums[b] == nums[b-1])continue;
+                int c = b+1; int d = N-1;
+                while(c < d)
+                {
+                    int sum = nums[a] + nums[b] + nums[c] + nums[d];
+                    if(sum > target)
+                    d--;
+                    else if(sum < target)
+                    c++;
+                    else {
+                        lists.push_back({nums[a],nums[b],nums[c],nums[d]}); 
+                        if(nums[c] == nums[d]) break;
+                        while(c < d && nums[c] == nums[c+1])c++;
+                        while(c < d && nums[d] == nums[d-1])d--;
+                        c++;
+                        d--;
+                    }
+                }
+            }
+        }
+        return lists;
+        }
+    }
+};
+```
+
