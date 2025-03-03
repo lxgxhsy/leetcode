@@ -1,0 +1,41 @@
+### 解题思路
+
+![image.png](https://pic.leetcode-cn.com/1644374502-mVYVnP-image.png)
+对于该矩形，最直接的思路就是，对于每一个矩形的位置，求出以该位置为右下角的最大区域面积即可。
+而要想得到最大的区域面积，且是从右下角开始，我们只需要对每一个位置求得以该位置向上的最高高度和最宽宽度。
+- 最宽宽度：只需要对于每一行求出该点前面连续1的个数即可（这里用$record$矩阵来记录），即代表该行的该位置的最宽宽度。
+- 最高高度：从当前行往上进行判断，碰到为1的，则继续往上，并且该过程要不断更新区域的宽度（取同列上所有位置的最宽宽度的最小值）。
+  这样对于每一个位置就得到了最大矩形区域的宽度和高度，然后在全局不断更新最大的面积即可。
+
+### 代码
+
+* python3
+
+```python
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        r, c = len(matrix), len(matrix[0])
+        #用一个矩阵来记录每个位置的连续1的个数
+        record_matrix = [[0 for i in range(c)] for j in range(r)]
+        area = 0
+        for i in range(r):
+            for j in range(c):
+                #由于第一列前面没有位置，需要单独考虑
+                if j==0 and matrix[i][j]=='1':
+                    record_matrix[i][j]=1
+                #不是第一列的为1的话直接在前一列的结果上加1即可
+                elif matrix[i][j]=='1':
+                    record_matrix[i][j] = record_matrix[i][j-1] + 1
+                #初始化矩形的宽度为当前位置连续1的个数
+                min_width = record_matrix[i][j]
+                #向上判断
+                for up_row in range(i, -1, -1):
+                    height = i - up_row + 1#更新高度
+                    if record_matrix[up_row][j]==0:#如果为0，直接终止
+                        break
+                    min_width = min(record_matrix[up_row][j], min_width)#更新矩形的宽度
+                    area = max(height * min_width, area)#更新最大面积
+       
+        return area
+```
+

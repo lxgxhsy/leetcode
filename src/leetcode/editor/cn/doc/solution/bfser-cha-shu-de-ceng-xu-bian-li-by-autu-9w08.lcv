@@ -1,0 +1,37 @@
+### 解题思路
+
+复习一遍二叉树的层序遍历
+1.首先我们from collections import deque，创建一个双端队列
+2.然后我们把二叉树的root加进这个队列里面
+3.然后我们开始循环,每一次循环都是遍历二叉树的一层结点，从头结点开始，每个结点我们都要判断其是否有左右子树，有就加进队列里，没有就跳过，然后每一次循环都要给深度+1
+4.循环结束，return res即可
+
+### 代码
+
+* python3
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxDepth(self, root: TreeNode) -> int:
+        if not root:return 0
+        queue=collections.deque()
+        res=0
+        queue.append(root)
+        while queue:
+            size=len(queue)
+            for _ in range(size):
+                node=queue.popleft()
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res+=1
+        return res
+```
+

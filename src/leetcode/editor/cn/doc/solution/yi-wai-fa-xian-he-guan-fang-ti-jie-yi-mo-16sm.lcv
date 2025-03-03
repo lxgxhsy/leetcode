@@ -1,0 +1,42 @@
+### 解题思路
+
+这道题不会肯定是初学者，对于初学者来说深度优先需要将对应的代码带入到对应的节点中去，最后看返回的值。
+我试着画画图
+![image.png](https://pic.leetcode-cn.com/1621239966-GlRtle-image.png)
+假如看不清，自己拿着图保存一下放大再看吧。
+层次遍历一样自己画画图，前期不画图做不出的
+累完了，祝君好运
+
+### 代码
+
+* cpp
+
+```cpp
+//深度优先
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(!root) return 0;
+        int left =  maxDepth(root->left)  + 1;
+        int right = maxDepth(root->right) + 1;
+        return max(left,right);
+    }
+    
+};
+//层序遍历解法
+class Solution {
+    int maxDep = -1;
+public:
+    int maxDepth(TreeNode* root) {
+        level(root,0);
+        return maxDep + 1;
+    }
+    void level(TreeNode* root,int lev){
+        if(!root) return ;
+        maxDep = max(maxDep, lev);
+        level(root->left, lev + 1);
+		level(root->right, lev + 1);
+    }
+};
+```
+
